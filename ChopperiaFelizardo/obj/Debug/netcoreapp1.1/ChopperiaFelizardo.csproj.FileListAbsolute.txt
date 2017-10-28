@@ -1,0 +1,10 @@
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\bin\Debug\netcoreapp1.1\ChopperiaFelizardo.deps.json
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\bin\Debug\netcoreapp1.1\ChopperiaFelizardo.runtimeconfig.json
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\bin\Debug\netcoreapp1.1\ChopperiaFelizardo.runtimeconfig.dev.json
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\bin\Debug\netcoreapp1.1\ChopperiaFelizardo.dll
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\bin\Debug\netcoreapp1.1\ChopperiaFelizardo.pdb
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\obj\Debug\netcoreapp1.1\ChopperiaFelizardo.csprojResolveAssemblyReference.cache
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\obj\Debug\netcoreapp1.1\UserSecretsAssemblyInfo.cs
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\obj\Debug\netcoreapp1.1\ChopperiaFelizardo.AssemblyInfo.cs
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\obj\Debug\netcoreapp1.1\ChopperiaFelizardo.dll
+C:\Users\Cleide\Documents\Visual Studio 2017\Projects\ChopperiaFelizardo\ChopperiaFelizardo\obj\Debug\netcoreapp1.1\ChopperiaFelizardo.pdb

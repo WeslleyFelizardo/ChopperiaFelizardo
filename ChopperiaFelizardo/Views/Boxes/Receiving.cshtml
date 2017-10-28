@@ -1,0 +1,451 @@
+@model ChopperiaFelizardo.Models.BoxViewModels.ReceivingViewModel
+@{
+    ViewData["Title"] = "Receiving";
+}
+
+<h2>Recebimento</h2>
+<br />
+@*<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>*@
+    <a class="btn btn-default" asp-controller="Orders" asp-action="Index" asp-route-id="@Model.Identifier">
+        @("Mesa " + Model.Identifier)
+</a>
+<br /><br />
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Consumo</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label>Comandas</label>
+                    <select id="OrderID" name="OrderID" class="form-control" asp-items="@Model.Orders">
+                        <option value="-1" selected>Todos os pedidos</option>
+                    </select>
+                    <br />
+                    <h3>Total: <span id="total" class="label label-default money">0,00</span></h3>
+                    <br />
+                    <h3>Pago: <span id="paid" class="label label-success">0,00</span></h3>
+                    <br />
+                    <h3>Restante: <span id="remainingValue" class="label label-danger">0,00</span></h3>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">Desconto</span>
+                            <input id="discount" value="0" type="text" class="form-control money fieldDiscount" aria-label="Amount (to the nearest dollar)">
+                            <span class="input-group-addon">
+                                <input class="fieldDiscount" id="checkDiscount" type="checkbox" aria-label="...">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">Acrescimo</span>
+                            <input id="addition" value="0" type="text" class="form-control money fieldAddition" aria-label="Amount (to the nearest dollar)">
+                            <span class="input-group-addon">
+                                <input class="fieldAddition" id="checkAddition" type="checkbox" aria-label="...">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button id="toHang" class="btn btn-default">Pendurar</button>
+                    </div>
+                </div>
+                </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Consumo</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="order">Forma de Pagamento</label>
+                    <select id="formsPayment" name="formsPayment" class="form-control" asp-items="@Model.FormPayments">
+                        <option value="-1" selected>Selecione...</option>
+                    </select>
+                            
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label>Valor a ser pago</label>
+                        <input type="text" value="0" class="form-control money" id="valuePaid" placeholder="Valor" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Valor</label>
+                        <input type="text" value="0" onblur="" class="form-control money" id="value" placeholder="Valor" />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Troco</label>
+                        <input disabled type="text" value="0,00" class="form-control money" id="change" placeholder="Valor" />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="text-center">
+                        <button id="toPay" class="btn btn-success">Pagar</button>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+
+        
+    </div>
+</div>
+
+<br />
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Pagamentos</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table" id="payments">
+            <thead>
+            <th>ID</th>
+            <th>Forma de Pagamento</th>
+            <th>Valor</th>
+            <th></th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.priceformat.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var idOrder = 0;
+
+    $(".money").priceFormat({
+            prefix: '',
+            thousandsSeparator: '.',
+            centsSeparator: ','
+        });
+
+    $(document).ready(function () {
+        enableControls();
+    });
+
+    $("select[name=OrderID]").change(function () {
+        idOrder = this.value;
+        if (idOrder != -1) {
+            getSummary(this.value);
+        }
+        else {
+            $("#total").html("0,00");
+            $("#paid").html("0,00");
+            $("#remainingValue").html("0,00");
+            $("#discount").val('0,00');
+            $("#addtion").val('0,00');
+            $("#valuePaid").val('0,00');
+            $("#value").val('0,00');
+        }
+        enableControls();
+    });
+
+    $("select[name=formsPayment]").change(function () {
+        enableControls();
+        if (this.value != 1) {
+            $("#value").val('0,00');
+            $("#change").val('0,00');
+            $("#value").attr("disabled", true);
+        }
+        else            
+            $("#value").attr("disabled", false);
+    });
+
+    $("#toPay").click(function () {
+        var value = 0;
+
+      //  if ($("#formsPayment").val() != 1)
+      //      value = $("#valuePaid").val();
+      //  else
+        value = $("#valuePaid").val();
+
+        if ($("#value").val() >= value || $("#formsPayment").val() != 1) {
+            addPayment($("#OrderID").val(), value, $("#formsPayment").val());
+            $("#change").val("0,00");
+            $("#formsPayment option").each(function () {
+                if ($(this).val() == -1)
+                    $(this).attr('selected', true);
+            });
+        }
+        else if ($("#formsPayment").val() == 1) {
+            alert("Valor recebido tem que ser maior ou igual ao valor pago");
+
+        }
+    });
+
+    function getSummary(id) {
+        fetch('/Orders/SummaryOrder/' + id) // URL de destino.
+            .then(response => { // 'response' possui todas informações da resposta.
+                if (response.ok) { // Bool para checar a respota.
+                    return response.json(); // É necessário transformar o 'body' para json, para que possa ser manipulado
+                }
+            })
+            .then(data => { // Recebe o 'data' em formato json.
+                refresh(data);
+
+            })
+            .catch(err => { // Recebe um objeto contendo as informações do erro.
+                console.log(err.message);
+            });
+    }
+
+    function addPayment(orderID, value, formPaymentID) {
+        $.ajax({
+            type: 'post',
+            url: '/OrderPayments/Create',
+            data: { OrderID: orderID, Value: value, FormPaymentID: formPaymentID },
+            success: function (datas) {
+                if (datas.amountOrder == 0 && datas.finish) {
+                    swal({
+                        title: "Todas as comandas dessa mesa foram fechadas corretamente!",
+                        text: "Aguarde, estamos liberando a mesa",
+                        imageUrl: "images/Tanks.png",
+                        showConfirmButton: false
+                    });
+                    setTimeout(function () {
+                        location.href = "http://localhost:59336/Tables/DisplayTables";
+                    }, 5000);
+                    
+                }
+                else if (datas.finish) {
+                    swal({
+                        title: "Obrigado pela preferência!",
+                        text: "Comanda fechada com sucesso, Volte Sempre!",
+                        type: "info",
+                        showCancelButton: false,
+                        //confirmButtonColor: "#DD6B55",
+                        closeOnConfirm: false,
+                        closeOnCancel: false,
+                        //timer: 2000
+                    },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                window.location.reload();
+                            }
+                        });
+                }
+                else if (datas.result) {
+                    notify("Pagamento recebido com sucesso", "success");
+                    getSummary(orderID);
+                }
+                                    
+            },
+            error: function (error) {
+                notify("Não foi possivel adicionar pagamento", "danger");
+
+            }
+        });
+
+    }
+    
+    function removePayment(id) {
+        swal({
+            title: "Deseja realmente remover esse pagamento?",
+            text: "Ao confirmar o pagamento será removido",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            //showLoaderOnConfirm: true,
+            closeOnConfirm: true
+        },
+            function () {
+                $.ajax({
+                    type: 'post',
+                    url: '/OrderPayments/Delete',
+                    data: { id: id },
+                    success: function (datas) {
+                        notify("Pagamento removido com sucesso", "success");
+                        getSummary(idOrder);
+                    },
+                    error: function (error) {
+                        notify("Não foi possivel remover pagamento", "danger");
+                    }
+                });
+            });
+       
+    }
+
+    function refresh(data) {
+        $("#total").html(data.total);
+        $("#paid").html(data.paid);
+        $("#remainingValue").html(data.remainingvalue);
+       
+        if (data.discount > 0)
+            $("#checkDiscount").prop('checked', true);
+        else
+            $("#checkDiscount").prop('checked', false);
+
+        if (data.addition > 0)
+            $("#checkAddition").prop('checked', true);
+        else
+            $("#checkAddition").prop('checked', false);
+
+        $("#discount").val(data.discount);
+        $("#addition").val(data.addition);
+        $("#valuePaid").val(data.remainingvalue);
+        $("#value").val("0,00");
+
+        generateRows(data.payments)
+    }
+
+    function generateRows(datas) {
+        $('table tr').each(function (indice) {
+            if (indice > 0) {
+                $(this).remove();
+            }
+        });
+
+        $.each(datas, function (index, value) {
+
+            var newRow = $("<tr>");
+            var cols = "";
+
+            cols += '<td>' + value.id + '</td>';
+            cols += '<td>' + value.formPayment.name + '</td>';
+            cols += '<td>' + parseFloat(value.value).toFixed(2).replace('.',',') + '</td>';
+
+            cols += '<td>';
+            cols += '<a  class="btn btn-danger" onclick="removePayment(' + value.id + ')">' + '<span class="glyphicon glyphicon-trash" aria-hidden="true"' +
+                '></span></a>';
+            cols += '</td>';
+
+
+
+            newRow.append(cols);
+            $("#payments").append(newRow);
+
+        });
+    }
+
+    $("#checkDiscount").click(function () {
+        if (this.checked)
+            toApllyDiscount($("#OrderID").val(), $("#discount").val());
+        else
+            toApllyDiscount($("#OrderID").val(), 0);
+    });
+
+    $("#checkAddition").click(function () {
+        if (this.checked)
+            toApllyAddition($("#OrderID").val(), $("#addition").val());
+        else
+            toApllyAddition($("#OrderID").val(), 0);
+    });
+
+    function toApllyDiscount(id, discount) {
+        
+        $.ajax({
+            type: 'put',
+            url: '/Orders/ToApllyDiscount',
+            data: { id: id, discount: discount },
+            success: function (datas) {
+                getSummary(id);
+            }
+        });
+    }
+
+    function toApllyAddition(id, addition) {
+        $.ajax({
+            type: 'put',
+            url: '/Orders/ToApllyAddition',
+            data: { id: id, addition: addition },
+            success: function (datas) {
+                getSummary(id);
+            }
+        });
+    }
+
+    function calculateDifferent() {
+        var valuePaid = parseFloat($("#valuePaid").val().toString().replace(',', '.'));
+        var value = parseFloat($("#value").val().toString().replace(',', '.'))
+        //alert();
+        var result = value - valuePaid;
+
+        if (result < 0) {
+            //$("#value").val('0,00');
+            $("#change").val('0,00');
+            $("#toPay").attr("disabled", true);
+
+           // return false;
+        }
+        else {
+            $("#toPay").attr("disabled", false);
+            $("#change").val(parseFloat(result).toFixed(2).toString().replace('.', ','));
+        }
+        //return true;
+    }
+
+    $("#value").keyup(function () {
+        calculateDifferent();
+    });
+
+    function enableControls() {
+        //$('#OrderID').attr('disabled', true);
+        var idOrder = $('#OrderID option:selected').val();
+        var idPayment = $('#formsPayment option:selected').val();
+
+        if (idOrder == -1) {
+            $('.fieldAddition').attr('disabled', true);
+            $('.fieldDiscount').attr('disabled', true);
+            $('#toHang').attr('disabled', true);
+            $('#formsPayment').attr('disabled', true);
+            $('#toPay').attr('disabled', true);
+        }
+        if (idOrder != -1) {
+            $('.fieldAddition').attr('disabled', false);
+            $('.fieldDiscount').attr('disabled', false);
+            $('#toHang').attr('disabled', false);
+            $('#formsPayment').attr('disabled', false);
+        }
+        if (idPayment != -1) {
+            $('#toPay').attr('disabled', false);
+        }
+        else {
+            $('#toPay').attr('disabled', true);
+
+        }
+
+    }
+
+    function notify(message, type) {
+        $.notify(
+            {
+                // options
+                message: message
+            },
+            {
+                type: type,
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                delay: 1000,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                }
+            });
+    }
+</script>
+

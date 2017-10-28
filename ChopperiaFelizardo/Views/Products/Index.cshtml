@@ -1,0 +1,12 @@
+@model ChopperiaFelizardo.Models.ProductViewModels.IndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <a class="btn btn-success" asp-action="Create">Novo</a>
+</p>
+
+
+@await Component.InvokeAsync("DataTable", new { entity = Model.GetType(), nameComponent = "Default" })

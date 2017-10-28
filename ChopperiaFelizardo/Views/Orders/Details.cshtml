@@ -1,0 +1,42 @@
+@model FelizardoChopperia.Models.Order
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Value)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Value)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Observation)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Situation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Situation.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Table)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Table.ID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

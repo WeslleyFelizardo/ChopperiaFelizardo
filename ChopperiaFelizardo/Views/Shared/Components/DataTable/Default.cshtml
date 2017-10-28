@@ -1,0 +1,71 @@
+﻿@model ChopperiaFelizardo.Models.DataTableViewModels.DatasViewModel
+
+<link href="~/css/jquery.bootgrid.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/dist/js/moderniz.2.8.1.js"></script>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-md-9">
+
+            <!--div class="table-responsive"-->
+            <table id="grid" class="table table-condensed table-hover table-striped">
+                <thead>
+                    <tr>
+                        @foreach (var item in Model.Configurations)
+                        {
+                           //data - identifier = "true"
+                           <th data-column-id="@item.NameJson" data-type="@item.Type" data-align="@item.DataAlign" data-headerAlign="@item.DataAlignHeader" data-width="40">@item.Display</th>
+                        }
+                        <th data-formatter="actions" data-width="40">Acao</th>
+                        
+                    </tr>
+                </thead>
+                @*<tbody>
+                        @foreach (var category in Model)
+                        {
+                            <tr>
+                                <td>@category.ID</td>
+                                <td>@category.Name</td>
+                            </tr>
+                        }
+
+
+                    </tbody>*@
+            </table>
+            <!--/div-->
+        </div>
+    </div>
+</div>
+
+    <script src="~/libBootGrid/jquery-1.11.1.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/distBootGrid/jquery.bootgrid.js"></script>
+    <script src="~/distBootGrid/jquery.bootgrid.fa.js"></script>
+    <script>
+        //alert("teste");
+        var translation = {
+            infos: "Exibindo {{ctx.start}} até {{ctx.end}} de {{ctx.total}} registros",
+            loading: "Carregando, isso pode levar alguns segundos...",
+            noResults: "Não há dados para serem exibidos",
+            refresh: "Atualizar",
+            search: "Pesquisar"
+        };
+
+        $("#grid").bootgrid({
+            ajax: true,
+            url: "@string.Format(Model.Url + "{0}", "Json")",
+        labels: translation,
+        formatters: {
+            "actions": function (column, row) {
+                return "<a class='btn btn-warning' href='@string.Format(Model.Url + "{0}/", "Details")" + row.id + "'> "
+                    +"<span class='glyphicon glyphicon-search'></span>"
+                    + "</a> "
+                    + "<a class='btn btn-info' href='@string.Format(Model.Url + "{0}/", "Edit")" + row.id + "'><span class='glyphicon glyphicon-edit'></span>  </a> "
+                    + "<a class='btn btn-danger' href='@string.Format(Model.Url + "{0}/", "Delete")" + row.id + "'> <span class='glyphicon glyphicon-trash'></span>  </a> ";
+
+            }
+        }
+    });
+    </script>
+

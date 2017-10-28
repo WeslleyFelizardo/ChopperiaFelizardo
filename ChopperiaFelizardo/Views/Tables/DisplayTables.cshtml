@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ChopperiaFelizardo.Models.Table>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    @foreach (var table in Model)
+    {
+        var isFree = "";
+        var colorButton = "";
+        var messageButton = "";
+        <div class="col-lg-3 col-md-3">
+            @if (table.Status.Equals("Ocupada"))
+            {
+                isFree = "panel-danger";
+                colorButton = "btn-danger";
+                messageButton = "Vizualizar Mesa";
+            }
+            else
+            {
+                isFree = "panel-green";
+                colorButton = "btn-success";
+                messageButton = "Abrir Mesa";
+            }
+                    <div class="asp-cl panel @isFree">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-tasks fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">@table.Identifier</div>
+                                    <div>Mesa: @table.NickName</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#">
+                            <div class="panel-footer">
+                                <span class="pull-left"></span>
+                                <span class="pull-right">
+                                    <a class="btn @colorButton" asp-controller="Tables"
+                                       asp-action="OpenTable" asp-route-id="@table.Identifier">@messageButton</a>
+                                </span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+        </div>
+    }
+</div>

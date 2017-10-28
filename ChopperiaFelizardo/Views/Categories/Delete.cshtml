@@ -1,0 +1,33 @@
+@model ChopperiaFelizardo.Models.Category
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Deletar</h2>
+
+<h3>Deseja realmente excluir essa categoria?</h3>
+<div>
+    <h4>Categoria</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="ID" />
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a class="btn btn-default" asp-action="Index">
+                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+                    Listagem
+                </span>
+            </a>
+        </div>
+    </form>
+</div>

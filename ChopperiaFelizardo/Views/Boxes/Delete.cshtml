@@ -1,0 +1,59 @@
+@model FelizardoChopperia.Models.Box
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Box</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="ID" />
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.isOpen)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.isOpen)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValueInitial)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValueInitial)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValueCurrent)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValueCurrent)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ValueEnd)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ValueEnd)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Employee.ID)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

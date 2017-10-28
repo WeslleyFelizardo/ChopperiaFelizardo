@@ -1,0 +1,47 @@
+@model FelizardoChopperia.Models.Order
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <input type="hidden" asp-for="ID" />
+        <dt>
+            @Html.DisplayNameFor(model => model.Value)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Value)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Observation)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Situation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Situation.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Table)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Table.ID)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>
